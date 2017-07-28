@@ -1,0 +1,57 @@
+#!/usr/bin/env sh
+
+#find inputted filename (direct or with wc (*))
+# from the cwd
+#uses unix find
+# ex. find . -iname 'input_from_arg0' -ls
+# input is a word to search for as a filename 
+# (or part of it, substring with wc)
+#all searches are without respect to case (-iname)
+
+1&>2
+echo "####" 1>&2
+echo "#findcwd, 10212014" 1>&2
+echo "#find a file rooted to your current location" 1>&2
+echo "#care of your friendly personalized medicine bioinformatics team." 1>&2
+echo "####" 1>&2
+
+#usage
+if [ "$1" == "" ]; then
+	echo "usage: findcwd filename use_wildcard(optional,default yes,any value)" 1>&2
+	exit
+fi
+
+echo CWD: `pwd` 1>&2
+
+#no wildcard in search
+if [[ "$2" == "" ]]; then
+	FILE="'*${1}*'"
+	echo WILDCARD: TRUE 1>&2
+else
+	FILE="'${1}'"
+	echo WILDCARD: FALSE 1>&2
+fi
+
+
+#exec
+if [ "$FILE" == "" ]; then
+	echo 1>&2
+	echo 'PARSE ERROR: stem is empty, "${FILE}"' 1>&2
+	exit
+fi
+
+echo "SEARCH STEM: $FILE" 1>&2
+echo "####" 1&>2
+echo 1&>2
+
+CMD="find . -iname $FILE -ls"
+echo CMD: $CMD 1>&2
+echo "####" 1>&2
+
+CMD="${CMD} | perl -Mstrict -e 'my \$num=0;while(<>){\$num++;print STDOUT \$_;}print STDERR \"\#\#\#\#\nNumber files found: \".\$num.\"\nDone.\n\";'"
+
+eval $CMD
+
+echo "####" 1>&2
+
+exit

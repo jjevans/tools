@@ -1,0 +1,79 @@
+#!/usr/bin/env sh
+#set -e
+
+#find inputted filename (direct or with wc (*))
+# from the cwd and from those files, grep an inputted 
+# term out of it.
+#uses unix find and grep
+# ex. find . -iname '*ARG0*' -ls -exec grep -i ARG1 {} \;
+# input is a word to search for as a filename 
+# (or part of it, substring with wc)
+#all searches are without respect to case (-iname)
+#default to remove any files (ls and empty grep) if 
+# grep had no output (EMPTY)
+WC=true
+EMPTY=true
+
+1&>2
+echo "####" 1>&2
+echo "#findgrep, 10212014" 1>&2
+echo "#find a term in files rooted to your current location" 1>&2
+echo "#care of your friendly personalized medicine bioinformatics team." 1>&2
+echo "####" 1>&2
+
+#usage
+if [ "$2" == "" ]; then
+	echo "" 1>&2
+	echo "usage: findgrep filename term_to_grep(multi-words quoted)" 1>&2
+	exit
+fi
+
+echo CWD: `pwd` 1>&2
+
+#no wildcard in search
+if $WC ; then
+	FILE="'*${1}*'"
+	echo WILDCARD: TRUE 1>&2
+else
+	FILE="'${1}'"
+	echo WILDCARD: FALSE 1>&2
+fi
+
+
+#exec
+if [ "$FILE" == "" ]; then
+	echo 1>&2
+	echo 'PARSE ERROR: stem is empty, "${FILE}"' 1>&2
+	exit
+fi
+
+echo "SEARCH TERM: $2" 1>&2
+echo "SEARCH STEM: $FILE" 1>&2
+echo "####" 1&>2
+echo 1&>2
+
+CMD="find . -iname $FILE -ls -exec grep $2 {}"
+echo CMD: $CMD 1>&2
+echo "####" 1>&2
+
+#build perl controller
+CMD="${CMD} | perl -Mstrict -e 'my \$num=0;while\(<\>\)\{"
+CMD="${CMD} if(/^\d{8,}/){\$num++;print STDERR \"\#\#\#\# FILE NUMBER: \$num\n\"\}"
+CMD="${CMD} my \@output=split\(\/\\n\\/,\\\$_\);print \@output.\"\\n\";"
+CMD="${CWD} if\(\@output\>1\)\{print STDOUT \$_;print STDERR \"\n\"\}\}"
+#CMD="${CMD} \| perl -Mstrict -e 'my \$num=0;while(<>){"
+#CMD="${CMD} if(/^\d{8,}/){\$num++;print STDERR \"\#\#\#\# FILE NUMBER: \$num\n\"\}\"
+#CMD="${CMD} my \@output=split\(\/\\n\\/,\\\$_\);print \@output.\"\\n\";"
+#CMD="${CWD} if\(\@output\>1\)\{print STDOUT \$_;print STDERR \"\n\"\}\}"
+echo
+echo $CMD
+echo
+
+#summary stats
+CMD="${CMD} print STDERR \#\#\#\# TOTAL: \$num\\n\#\#\#\#\\nSuccessfully completed.\\nTotal number of files found: \$num\\nDONE.\\n\;'"
+echo $CMD
+eval $CMD
+
+echo "####" 1>&2
+
+exit

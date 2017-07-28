@@ -1,0 +1,18 @@
+
+#location
+DIR1=/scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/coverage/run_10272014
+DIR2=/scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/coverage/run_10272014/hack_11062015
+
+#navigate
+alias aa="cd $DIR2/A5P78-1"
+alias bb="cd $DIR2/A670K-3"
+alias cc="cd $DIR2/A671B-2"
+alias dd="cd $DIR2/A6731-2"
+alias ee="cd $DIR2/A7NC8-3"
+
+back="cd $DIR1"
+forth="cd $DIR2"
+
+#cmd
+alias jj='cd $AMPL;findcwd README;cd -'
+

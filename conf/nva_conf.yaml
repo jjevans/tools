@@ -1,0 +1,52 @@
+%YAML 1.2
+---
+Project: 
+    directory: /Users/jje16/Work/Tools/SVN/ngs/NVA/trunk/support_script/test_run/whole_process/test3
+    email:
+        from: jevans16@partners.org
+        to:
+            - jevans16@partners.org
+    criteria:
+        time_period: 1 #number of days to go back in CMS
+        categories:
+            -
+              type: Likely Pathogenic
+              time_period: 180 #number days since last assessment
+            -
+              type: Unknown Significance
+              time_period: 90
+    files:
+        vcf: None
+        manual: None
+GeneInsight:
+    web_service:
+        url:
+            GenomeBuildMapping: https://geneinsight-lmm-ws.partners.org/services/GenomeBuildMapping?wsdl
+            Variant: https://geneinsight-lmm-ws.partners.org/services/Variant?wsdl
+        user: lmm
+        password: x377BLCi
+    database: #CMS
+        user: gigpad_clinical
+        password: g2J$3KHU
+        host: racclusr2.dipr.partners.org
+        port: 1521
+        service: gpadprod.pcpgm.partners.org
+Alamut:
+    executable: /opt/alamut-ht/alamut-ht-1.1.2-standalone/alamut-ht
+    ssh:
+        machine: alamut-ht1.dipr.partners.org
+        user: null #ignored if ssh keys established
+        password: null
+        directory: /PHShome/jje16/Data/test_nva/alamut_test16/jason/james/evans
+    options:
+        - alltrans
+        - nonnsplice
+        - nomispred
+        - outputannonly
+    skip_patterns: # a list of strings to indicate that this error in stderr is to be ignored
+        - "QSqlDatabasePrivate::removeDatabase: connection 'qt_sql_default_connection' is still in use, all queries will cease to work."
+Execute: # if any false, put filename of input to use instead of doing this part
+    finder: True 
+    annotator: 
+        alamut: True
+    writer: True

@@ -1,0 +1,30 @@
+%YAML 1.2
+---
+Project: 
+    criteria:
+        time_period: 1 #number of days to go back in CMS
+        categories:
+            -
+              type: Likely Pathogenic
+              time_period: 180 #days since last assessment
+            -
+              type: Unknown Significance
+              time_period: 90
+    files:
+        relative_to_config: true
+        extensions:
+            cms_vcf: "cms.vcf"
+    genome_build: GRCh37
+GeneInsight:
+    web_service:
+        url:
+            GenomeBuildMapping: https://geneinsight-lmm-ws.partners.org/services/GenomeBuildMapping?wsdl
+            Variant: https://geneinsight-lmm-ws.partners.org/services/Variant?wsdl
+        user: lmm
+        password: x377BLCi
+    database: #CMS
+        user: gigpad_clinical
+        password: g2J$3KHU
+        host: racclusr2.dipr.partners.org
+        port: 1521
+        service: gpadprod.pcpgm.partners.org

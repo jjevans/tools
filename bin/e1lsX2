@@ -1,0 +1,77 @@
+#!/usr/bin/env perl
+use strict;
+use Cwd;
+use Getopt::Long;
+
+#list inputted directory on erisone,
+# like ls, but with find
+#file types possible are:
+#	f = regular file (default)
+#	c = character
+#	d = directory
+#	l = symlink
+#my $dir = ".";#default cwd, for find sys call instead of ls
+#servers
+my $server0;
+my $server0_default = "ssh.research.partners.org";
+my $server1;
+my $server1_default = "erisone.partners.org";
+my $depth;
+my $depth_default = 2;
+my $type;
+my $type_default = "f";
+my $print_cmd = 0;
+my $submit = 1;
+my $dir;#default cwd
+
+
+#message
+my $usage = "usage e1lsX2 -depth (optional,2) -type (optional, default all files) -mid (intermediate server, default ssh.research.partners.org) -end (server to ls, default erisone.partners.org) -print (flag,false) -nosubmit (flag,false (submits))";
+
+#"h|help|?"=>\$usage,
+my $look = {"h|help|?",
+        	"d|depth" => \$depth,
+		"t|type" => \$type,
+		"p|print",
+		"ns|nosubmit",
+		"m|mid"=> \$server0,
+		"e|end"=> \$server1};
+
+GetOptions($look,"depth=i","type=s","print","nosubmit","mid=s","end=s","help");
+
+#set defaults
+$look->{"depth"} = $depth_default unless defined($look->{"depth"});
+$look->{"type"} = $type_default unless defined($look->{"type"});
+$look->{"mid"} = $server0_default unless defined($look->{"mid"});
+$look->{"end"} = $server1_default unless defined($look->{"end"});
+
+#dir provided or use cwd
+if(defined($ARGV[0])){
+	$dir = $ARGV[0];
+}
+else{
+	$dir = getcwd();
+}
+
+
+#build cmds
+my $find = "find ".$dir." -type ".$look->{"type"}." ";
+$find .= "-maxdepth ".$look->{"depth"}." " if defined($look->{"depth"});
+$find .= "-ls";
+
+my $cmd = "ssh ".$look->{"mid"}." ssh ".$look->{"end"}." ".$find;
+
+
+#print commands
+print $cmd."\n" if defined($look->{"print"});
+
+
+#sys call
+unless(defined($look->{"nosubmit"})){
+
+	my $code = system($cmd);
+	warn "ERROR: Problem with executing command:\nERROR:\t".$cmd."\n" if $code;
+}
+
+
+exit;

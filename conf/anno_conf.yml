@@ -1,0 +1,104 @@
+# $Id: anno_conf.yml 709 2015-05-22 15:08:05Z jje16 $
+
+Tool:
+  vcf_sort:
+    region: "/scratch/pcpgm/share/etc/roi/RefSeqExons_GwasCat_PharmGKB_LMMtarget_20140226_merge_noChr.bed"
+  vep:
+    config: "/scratch/pcpgm/share/software/vep/vep.ini"
+    cache: "/scratch/pcpgm/share/software/vep/cache"
+    plugin:
+      - Condel
+      - "/scratch/pcpgm/share/software/vep/plugins/config"
+      - b
+      - "1"
+  snpeff:
+    software: "/scratch/pcpgm/share/software/snpEff_v4_1_1devel/SnpSift.jar"
+    1000genome: "/scratch/pcpgm/share/annot_db/1000g_p1v3_20101123_sep2014_custdb.vcf"
+    clinvar: "/scratch/pcpgm/share/annot_db/clinvar_20140902_leftAlign_custdb.vcf"
+    dbsnp: "/scratch/pcpgm/share/annot_db/dbsnp_v142_custdb.vcf"
+    exac: "/scratch/pcpgm/share/annot_db/ExAC.r0.3.altfreq.ppm.vcf"
+    #esp: "/scratch/pcpgm/share/annot_db/ESP6500SI-V2_custdb.vcf"
+  hgmd:
+    #script: /scratch/pcpgm/share/cmd/annot/hgmd_v2.pl
+    script: hgmd_v2.pl
+    vcf: /scratch/pcpgm/share/annot_db/HGMD_PRO_2014.2.vcf
+  alamut:
+    software: "/scratch/pcpgm/share/software/alamut/versions/alamut-batch-standalone-1.2.0/alamut-ht"
+    field: "/scratch/pcpgm/share/etc/alamut/alamut_fields_v1.2.0.tsv"
+    num_proc: 1
+  uploader:
+    directory: "/scratch/pcpgm/share/cmd/gdr/wgs-vcfloader-1.61"
+Version:
+  gs_pipe_version: &GS_PIPE_VERSION "1.29"
+  vep:
+    gs_pipe_version: *GS_PIPE_VERSION
+    software: "vep|75"
+    annot_db:
+      - "ensembl|75"
+      - "esp_cov|6500SI-V2"
+    target_interval: "RefSeqExons_GwasCat_PharmGKB_LMMtarget_20140226.bed"
+  snpeff:
+    gs_pipe_version: *GS_PIPE_VERSION
+    software: "snpeff|4.1.1_devel"
+    annot_db:
+      - "1000g|p1v3_20140916"
+      - "clinvar|20140902"
+      - "dbsnp|142"
+      - "exac|r0.3"
+      #- "esp_freq|6500SI-V2"
+    target_interval: "RefSeqExons_GwasCat_PharmGKB_LMMtarget_20140226.bed"
+  hgmd:
+    gs_pipe_version: *GS_PIPE_VERSION
+    software: "snpeff|4.1_alpha"
+    annot_db:
+      - "hgmd|2014Q2"
+    target_interval: "RefSeqExons_GwasCat_PharmGKB_LMMtarget_20140226.bed"
+  alamut: 
+    gs_pipe_version: *GS_PIPE_VERSION
+    software: "alamut-ht|1.2.0"
+    annot_db:
+      - "alamut_db|1.2-2014.08.01"
+LSF:
+  queue: pcpgmwgs
+  alamut_job_group: "/alamut"
+  hgmd_job_group: "/hgmd"
+  vep_job_group: "/vep"
+  vcfupload_job_group: "/vcf_upload"
+  host_group:
+  num_proc: 1
+  mem_res: 6000
+  mem_limit: 16000
+  email:
+    - "jevans16@partners.org"
+#    - "etsai3@partners.org"
+#    - "prossetti@partners.org"
+Path:
+  java:
+    - "/scratch/pcpgm/share/software/snpEff_v4_1alpha"
+  perl:
+    - "/scratch/pcpgm/share/software/vep"
+    - "/scratch/pcpgm/share/software/vep/plugins"
+  unix:
+    - "/data/pcpgm/share/cmd/geisinger/annot"
+    - "/scratch/pcpgm/share/software/ensembl-tools-release-75/scripts/variant_effect_predictor"
+    - "/scratch/pcpgm/share/cmd/annot"
+    - "/scratch/pcpgm/share/software/tabix_dir"
+    - "/scratch/pcpgm/share/software/vcftools/bin"
+    - "/scratch/pcpgm/share/software/gvcftools/bin"
+    - "/scratch/pcpgm/share/filtration/src"
+Database:
+  hgmd:
+    username: wgs_user
+    password: Pju7ogJQ
+    host: mysql2.dipr.partners.org
+    service: hgmd
+  uploader:
+#    username: wgs_geisinger
+#    password: genome15
+#    username: wgs_prod
+#    password: 0oNE9AZr
+    username: wgs_dev
+    password: genome14
+    host: racclusr2.dipr.partners.org
+    port: 1521
+    service: lmmwgs.pcpgm.partners.org    

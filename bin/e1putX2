@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+use strict;
+use File::Basename;
+
+#servers
+my $server0 = "ssh.research.partners.org";
+my $server1 = "erisone.partners.org";
+
+#remove intermediate file on server0
+my $rm = 1;
+my $rm_ask = 1;#rm -i
+
+#actions
+my $print_cmd = 1;#print the command
+my $submit = 1;#do system call
+
+die "usage: e1putX2 file_to_transfer remote_path_to_put_it(optional,default ~)\n" unless @ARGV > 0;
+
+#file
+my $path = $ARGV[0];
+my $file = basename($path);
+
+my $remote = $ARGV[1];
+
+#commands
+my $cmd0 = "scp ".$path." ".$server0.":";
+my $cmd1 = "ssh ".$server0." 'scp ".$file." ".$server1.":".$remote."'";
+
+
+if($rm){
+
+	my $opt;
+	$opt = "-i" if $rm_ask;
+
+	$cmd1 =~ s/'$/ \;rm $opt $file'/;
+}
+
+#print commands
+print $cmd0."\n".$cmd1."\n" if $print_cmd;
+
+
+#sys
+if($submit){
+	my $code = system($cmd0);
+	die "ERROR: Problem with 1st transfer.\nERROR: ".$cmd0."\n" if $code;
+	
+	$code = system($cmd1);
+	die "ERROR: Problem with 2nd transfer.\nERROR: ".$cmd1."\n" if $code;
+}
+
+exit;

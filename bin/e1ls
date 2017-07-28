@@ -1,0 +1,57 @@
+#!/usr/bin/env perl
+use strict;
+use Data::Dumper;
+use Getopt::Long;
+
+#list inputted directory on erisone,
+# like ls, but with find
+#file types possible are:
+#	f = regular file (default)
+#	c = character
+#	d = directory
+#	l = symlink
+my $server = "erisone.partners.org";
+
+#all valid types of files to limit to
+my %alltype = {"f"=>"regular file (default)","c"=>"character (text)","d"=>"directory","l"=>"symbolic link"};
+
+#my $dir = ".";#default cwd, for find sys call instead of ls
+my $dir;#default cwd
+my $depth;
+my $type;
+my $usage = "usage: e1_ls -depth (optional,all) -type (option, default regular file) remote_directory (or home if none)\n";
+
+#"h|help|?"=>\$usage,
+my %look = ("h|help|?",
+				"d|depth"=>\$depth,
+			 	"t|type"=> \$type || "f");
+GetOptions(\%look,"depth=i","type=s","help");
+
+$dir = $ARGV[0] if defined($ARGV[0]);
+
+#my $cmd = "ssh erisone.partners.org ls ".$dir;
+my $cmd = "ssh ".$server." find";
+
+if(defined($type)){#just this type of file
+	if(exists($alltype{$type})){
+		$cmd .= " -type ".$type;
+	}
+	else{
+		print STDERR $usage."\nERROR: type not accepted: ".$type."\nvalid types: ";
+		die eval(Dumper %alltype)."\n";
+	}
+}
+else{#all files
+	$cmd .= " -name '*'";
+}
+	
+if(exists($depth)){
+	$cmd .= " -maxdepth ".$depth;
+}
+
+$cmd .= " -ls";
+
+my $status = system($cmd);
+print STDERR "ERROR: unable to read directory contents from remote machine: ".$dir."\n" if $status;
+
+exit;

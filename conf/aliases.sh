@@ -1,0 +1,11 @@
+alias aa="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014/aln/A5P78-1"
+alias bb="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014/aln/A670K-3"
+alias cc="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014/aln/A671B-2"
+alias dd="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014/aln/A6731-2"
+alias ee="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014/aln/A7NC8-3"
+alias jj='cd $AMPL;findcwd README \| grep -v vcf_hack;cd -'
+#alias pp='cd $AMPL;findgrep README'
+export PROJ=/scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014
+export ALT=/scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/coverage/
+#alias old="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/vcf_hack"
+#alias new="cd /scratch/pcpgm/jje/projects/ampl_seq/gba_snca0/run/run_10272014

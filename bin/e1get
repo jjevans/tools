@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+use strict;
+
+#scp file from erisone
+
+die "usage: from_e1.pl file_to_retrieve\n" unless @ARGV == 1;
+my $file = $ARGV[0];
+
+my $cmd = "scp erisone.partners.org:".$file." ."; 
+
+system($cmd);
+if($!){
+	system("perror ".$!); 
+}
+
+exit;
+

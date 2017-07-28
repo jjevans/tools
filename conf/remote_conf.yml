@@ -1,0 +1,29 @@
+Execute:
+  executable: "/PHShome/jje16/Tools/internal/SVN/wgs/branches/annotation-up_2015_2/variantAnnotation.pl"
+  args:
+    #- ["--input_vcf",__file__] #UNUSED FOR NOW
+    - ["--config", "/PHShome/jje16/Tools/internal/SVN/wgs/branches/annotation-up_2015_2/anno_conf.yml"]
+Remote:
+  location:
+    machine: erisone.partners.org
+    user: 
+    password: 
+  directory: "/scratch/pcpgm/jje16/dev/active/remote_submit/test/test0"
+LSF:
+  executable: bsub
+  args:
+    - ["-q", pcpgmwgs]
+    #- ["-m", None]
+    - ["-n", 1]
+    - ["-R", "rusage'[ncpus=1] span[hosts=1]'"]
+    - ["-R", "'rusage[mem=6000]'"]
+    - ["-o", "/scratch/pcpgm/jje16/dev/active/remote_submit/test/test0/lsf.out"]
+    - ["-e", "/scratch/pcpgm/jje16/dev/active/remote_submit/test/test0/lsf.err"]
+    #- ["-w", "jevans16@partners.org"]
+Path:
+  PYTHONPATH:
+    - 
+  PERL5LIB:
+    - 
+  PATH:
+    - 

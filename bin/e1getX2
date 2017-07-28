@@ -1,0 +1,63 @@
+#!/usr/bin/env perl
+use strict;
+use Cwd;
+use File::Basename;
+
+#servers
+my $server0 = "ssh.research.partners.org";
+my $server1 = "erisone.partners.org";
+
+#remove intermediate file on server0
+my $rm = 1;
+my $rm_ask = 1;#rm -i
+
+#retrieve a file from erisone
+my $print_cmd = 1;
+my $submit = 1;
+
+die "usage: e1getX2 file_to_retrieve local_path_to_put_it(optional,default cwd)\n" unless @ARGV > 0;
+
+#file
+my $path = $ARGV[0];
+my $file = basename($path);
+
+my $local;
+if(defined($ARGV[1])){
+	$local = $ARGV[1];
+}
+else{
+	$local = getcwd;
+}
+
+#commands
+my $cmd0 = "ssh ".$server0." scp ".$server1.":".$path." .";
+my $cmd1 = "scp ".$server0.":".$file." ".$local;
+
+my $cmd2;
+if($rm){
+
+	my $opt;
+	$opt = "-i" if $rm_ask;
+
+	$cmd2 = "ssh ".$server0." rm ".$opt." ".$file;
+}
+
+if($print_cmd){
+	print $cmd0."\n".$cmd1."\n";
+	print $cmd2."\n" if $rm;
+}
+
+if($submit){
+	my $code = system($cmd0);
+	die "ERROR: Problem with 1st transfer.\nERROR: ".$cmd0."\n" if $code;
+
+	$code = system($cmd1);
+	die "ERROR: Problem with 2nd transfer.\nERROR: ".$cmd1."\n" if $code;
+	
+	if($rm){
+		$code = system($cmd2);
+		die "ERROR: Problem removing intermediat files on server: ".$server0."\n" if $code;
+	}
+}
+
+exit;

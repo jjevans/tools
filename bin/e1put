@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+use strict;
+
+#scp file from erisone
+
+die "usage: e1put file_to_transfer remote_dir_to_put(optional)\n" unless @ARGV >= 1;
+my $file = $ARGV[0];
+my $dir = $ARGV[1];#undef if no arg
+
+my $cmd = "scp ".$file." erisone.partners.org:".$dir; 
+
+my $errno;
+
+print `$cmd`."\n";
+#if($!){
+#	system("perror ".$!); 
+#}
+
+exit;
